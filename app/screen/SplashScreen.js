@@ -36,7 +36,7 @@ const SplashScreen = ({navigation}) => {
         />
       </View>
       <Animatable.View style={[styles.footer]} animation="fadeInUpBig">
-        <Text style={[styles.title]}>Stay connected with everyone!</Text>
+        <Text style={[styles.title]}>One stop solution for any problem!</Text>
         <Text style={styles.text}>Sign in with account</Text>
         <View style={styles.button}>
           <TouchableOpacity onPress={() => nextNavigateScreen()}>

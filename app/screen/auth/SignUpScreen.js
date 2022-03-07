@@ -6,14 +6,18 @@ import {
   TextInput,
   Platform,
   StyleSheet,
-  ScrollView,
   StatusBar,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as Validators from '../../utils/Validators';
+import * as COLORS from '../../utils/Colors';
+import Scale, {verticalScale} from '../../utils/Scale';
+import * as Constant from '../../utils/Constant';
+import RadioButton from '../../components/RadioButton';
 
 class SignUpScreen extends Component {
   constructor(props) {
@@ -28,7 +32,9 @@ class SignUpScreen extends Component {
         check_textInputChange: false,
         secureTextEntry: true,
         confirm_secureTextEntry: true,
+        nationality: '',
       },
+      page: 1,
     };
   }
 
@@ -98,210 +104,292 @@ class SignUpScreen extends Component {
     };
   }
 
-  render() {
+  registerFirstPage() {
+    const {data} = this.state;
+
+    return (
+      <>
+        <Text style={styles.text_footer}>First Name</Text>
+        <View style={[styles.action, styles.viewSeperator]}>
+          <FontAwesome name="user-o" color="#05375a" size={20} />
+          <TextInput
+            placeholder="Your firstname"
+            style={styles.textInput}
+            autoCapitalize="none"
+            underlineColorAndroid="transparent"
+            onChangeText={val =>
+              this.setState({
+                data: {
+                  ...this.state.data,
+                  firstname: val,
+                },
+              })
+            }
+          />
+          {data.check_textInputChange ? (
+            <Animatable.View animation="bounceIn">
+              <Feather name="check-circle" color="green" size={20} />
+            </Animatable.View>
+          ) : null}
+        </View>
+
+        <Text style={styles.text_footer}>Last Name</Text>
+        <View style={[styles.action, styles.viewSeperator]}>
+          <FontAwesome name="user-o" color="#05375a" size={20} />
+          <TextInput
+            placeholder="Your lastname"
+            style={styles.textInput}
+            autoCapitalize="none"
+            underlineColorAndroid="transparent"
+            onChangeText={val =>
+              this.setState({
+                data: {
+                  ...this.state.data,
+                  lastname: val,
+                },
+              })
+            }
+          />
+          {data.check_textInputChange ? (
+            <Animatable.View animation="bounceIn">
+              <Feather name="check-circle" color="green" size={20} />
+            </Animatable.View>
+          ) : null}
+        </View>
+
+        <Text style={styles.text_footer}>Email</Text>
+        <View style={[styles.action, styles.viewSeperator]}>
+          <FontAwesome name="user-o" color="#05375a" size={20} />
+          <TextInput
+            placeholder="Your email"
+            style={styles.textInput}
+            autoCapitalize="none"
+            underlineColorAndroid="transparent"
+            onChangeText={val => this.textInputChange(val)}
+          />
+          {data.check_textInputChange ? (
+            <Animatable.View animation="bounceIn">
+              <Feather name="check-circle" color="green" size={20} />
+            </Animatable.View>
+          ) : null}
+        </View>
+      </>
+    );
+  }
+
+  renderButtons() {
     const {data} = this.state;
     return (
+      <View style={styles.button}>
+        <TouchableOpacity
+          style={styles.signIn}
+          onPress={() => {
+            this.signInHandle(
+              data.firstname,
+              data.lastname,
+              data.email,
+              data.password,
+            );
+          }}>
+          <LinearGradient colors={['#08d4c4', '#01ab9d']} style={styles.signIn}>
+            <Text
+              style={[
+                styles.textSign,
+                {
+                  color: '#fff',
+                },
+              ]}>
+              Sign Up
+            </Text>
+          </LinearGradient>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => this.props.navigation.goBack()}
+          style={[
+            styles.signIn,
+            {
+              borderColor: '#009387',
+              borderWidth: 1,
+              marginTop: 15,
+            },
+          ]}>
+          <Text
+            style={[
+              styles.textSign,
+              {
+                color: '#009387',
+              },
+            ]}>
+            Sign In
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  renderPassword() {
+    const {data} = this.state;
+    return (
+      <>
+        <Text
+          style={[
+            styles.text_footer,
+            {
+              marginTop: 10,
+            },
+          ]}>
+          Password
+        </Text>
+        <View style={styles.action}>
+          <Feather name="lock" color="#05375a" size={20} />
+          <TextInput
+            placeholder="Your Password"
+            secureTextEntry={data.secureTextEntry ? true : false}
+            style={styles.textInput}
+            autoCapitalize="none"
+            onChangeText={val => this.handlePasswordChange(val)}
+          />
+          <TouchableOpacity onPress={() => this.updateSecureTextEntry()}>
+            {data.secureTextEntry ? (
+              <Feather name="eye-off" color="grey" size={20} />
+            ) : (
+              <Feather name="eye" color="grey" size={20} />
+            )}
+          </TouchableOpacity>
+        </View>
+
+        <Text
+          style={[
+            styles.text_footer,
+            {
+              marginTop: 10,
+            },
+          ]}>
+          Confirm Password
+        </Text>
+        <View style={styles.action}>
+          <Feather name="lock" color="#05375a" size={20} />
+          <TextInput
+            placeholder="Confirm Your Password"
+            secureTextEntry={data.confirm_secureTextEntry ? true : false}
+            style={styles.textInput}
+            autoCapitalize="none"
+            onChangeText={val => this.handleConfirmPasswordChange(val)}
+          />
+          <TouchableOpacity onPress={() => this.updateConfirmSecureTextEntry()}>
+            {data.confirm_secureTextEntry ? (
+              <Feather name="eye-off" color="grey" size={20} />
+            ) : (
+              <Feather name="eye" color="grey" size={20} />
+            )}
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.textPrivate}>
+          <Text style={styles.color_textPrivate}>
+            By signing up you agree to our
+          </Text>
+          <Text style={[styles.color_textPrivate, {fontWeight: 'bold'}]}>
+            {' '}
+            Terms of service
+          </Text>
+          <Text style={styles.color_textPrivate}> and</Text>
+          <Text style={[styles.color_textPrivate, {fontWeight: 'bold'}]}>
+            {' '}
+            Privacy policy
+          </Text>
+        </View>
+      </>
+    );
+  }
+
+  renderMoreInforView() {
+    return (
+      <View>
+        <Text style={[styles.text_footer]}>Citizen Status</Text>
+        <RadioButton DropData={Constant.Citizen} />
+        <View style={styles.viewSeperator} />
+
+        <Text style={[styles.text_footer]}>Mobile Number</Text>
+        <View style={[styles.action, styles.viewSeperator]}>
+          <MaterialIcons
+            name="add-call"
+            color={COLORS.THEME_DARK_GREEN}
+            size={20}
+          />
+          <TextInput
+            placeholder="+19029029022"
+            style={styles.textInput}
+            autoCapitalize="none"
+            underlineColorAndroid="transparent"
+            onChangeText={val =>
+              this.setState({
+                data: {
+                  ...this.state.data,
+                  firstname: val,
+                },
+              })
+            }
+          />
+        </View>
+
+        <Text style={[styles.text_footer]}>Gender</Text>
+        <RadioButton DropData={Constant.Gender} />
+        <View style={styles.viewSeperator} />
+      </View>
+    );
+  }
+
+  render() {
+    return (
       <View style={styles.container}>
-        <StatusBar backgroundColor="#009387" barStyle="light-content" />
+        <StatusBar
+          backgroundColor={COLORS.THEME_GREEN}
+          barStyle="light-content"
+        />
         <View style={styles.header}>
           <Text style={styles.text_header}>Register Now!</Text>
         </View>
         <Animatable.View animation="fadeInUpBig" style={styles.footer}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <Text style={[styles.text_footer]}>First Name</Text>
-            <View style={styles.action}>
-              <FontAwesome name="user-o" color="#05375a" size={20} />
-              <TextInput
-                placeholder="Your firstname"
-                style={styles.textInput}
-                autoCapitalize="none"
-                onChangeText={val =>
-                  this.setState({
-                    data: {
-                      ...this.state.data,
-                      firstname: val,
-                    },
-                  })
-                }
-              />
-              {data.check_textInputChange ? (
-                <Animatable.View animation="bounceIn">
-                  <Feather name="check-circle" color="green" size={20} />
-                </Animatable.View>
-              ) : null}
-            </View>
+          {/* <ScrollView showsVerticalScrollIndicator={false}> */}
+          {this.state.page === 1 && this.registerFirstPage()}
 
-            <Text
-              style={[
-                styles.text_footer,
-                {
-                  marginTop: 10,
-                },
-              ]}>
-              Last Name
-            </Text>
-            <View style={styles.action}>
-              <FontAwesome name="user-o" color="#05375a" size={20} />
-              <TextInput
-                placeholder="Your lastname"
-                style={styles.textInput}
-                autoCapitalize="none"
-                onChangeText={val =>
-                  this.setState({
-                    data: {
-                      ...this.state.data,
-                      lastname: val,
-                    },
-                  })
-                }
-              />
-              {data.check_textInputChange ? (
-                <Animatable.View animation="bounceIn">
-                  <Feather name="check-circle" color="green" size={20} />
-                </Animatable.View>
-              ) : null}
-            </View>
+          {this.state.page === 2 && this.renderMoreInforView()}
 
-            <Text
-              style={[
-                styles.text_footer,
-                {
-                  marginTop: 10,
-                },
-              ]}>
-              Email
-            </Text>
-            <View style={styles.action}>
-              <FontAwesome name="user-o" color="#05375a" size={20} />
-              <TextInput
-                placeholder="Your email"
-                style={styles.textInput}
-                autoCapitalize="none"
-                onChangeText={val => this.textInputChange(val)}
-              />
-              {data.check_textInputChange ? (
-                <Animatable.View animation="bounceIn">
-                  <Feather name="check-circle" color="green" size={20} />
-                </Animatable.View>
-              ) : null}
-            </View>
+          {this.state.page === 3 && this.renderPassword()}
 
-            <Text
-              style={[
-                styles.text_footer,
-                {
-                  marginTop: 10,
-                },
-              ]}>
-              Password
-            </Text>
-            <View style={styles.action}>
-              <Feather name="lock" color="#05375a" size={20} />
-              <TextInput
-                placeholder="Your Password"
-                secureTextEntry={data.secureTextEntry ? true : false}
-                style={styles.textInput}
-                autoCapitalize="none"
-                onChangeText={val => this.handlePasswordChange(val)}
-              />
-              <TouchableOpacity onPress={() => this.updateSecureTextEntry()}>
-                {data.secureTextEntry ? (
-                  <Feather name="eye-off" color="grey" size={20} />
-                ) : (
-                  <Feather name="eye" color="grey" size={20} />
-                )}
-              </TouchableOpacity>
-            </View>
+          {this.state.page === 3 && this.renderButtons()}
 
-            {/* <Text
-              style={[
-                styles.text_footer,
-                {
-                  marginTop: 10,
-                },
-              ]}>
-              Confirm Password
-            </Text>
-            <View style={styles.action}>
-              <Feather name="lock" color="#05375a" size={20} />
-              <TextInput
-                placeholder="Confirm Your Password"
-                secureTextEntry={data.confirm_secureTextEntry ? true : false}
-                style={styles.textInput}
-                autoCapitalize="none"
-                onChangeText={val => this.handleConfirmPasswordChange(val)}
-              />
+          <View style={styles.formControlView}>
+            {this.state.page > 1 ? (
               <TouchableOpacity
-                onPress={() => this.updateConfirmSecureTextEntry()}>
-                {data.confirm_secureTextEntry ? (
-                  <Feather name="eye-off" color="grey" size={20} />
-                ) : (
-                  <Feather name="eye" color="grey" size={20} />
-                )}
+                style={styles.formControlBtn}
+                onPress={() => this.setState({page: this.state.page - 1})}>
+                <FontAwesome
+                  name="angle-left"
+                  color={COLORS.DEFAULT_WHITE}
+                  size={25}
+                />
               </TouchableOpacity>
-            </View> */}
-            <View style={styles.textPrivate}>
-              <Text style={styles.color_textPrivate}>
-                By signing up you agree to our
-              </Text>
-              <Text style={[styles.color_textPrivate, {fontWeight: 'bold'}]}>
-                {' '}
-                Terms of service
-              </Text>
-              <Text style={styles.color_textPrivate}> and</Text>
-              <Text style={[styles.color_textPrivate, {fontWeight: 'bold'}]}>
-                {' '}
-                Privacy policy
-              </Text>
-            </View>
-            <View style={styles.button}>
+            ) : (
+              <View />
+            )}
+            {this.state.page < 3 ? (
               <TouchableOpacity
-                style={styles.signIn}
-                onPress={() => {
-                  this.signInHandle(
-                    data.firstname,
-                    data.lastname,
-                    data.email,
-                    data.password,
-                  );
-                }}>
-                <LinearGradient
-                  colors={['#08d4c4', '#01ab9d']}
-                  style={styles.signIn}>
-                  <Text
-                    style={[
-                      styles.textSign,
-                      {
-                        color: '#fff',
-                      },
-                    ]}>
-                    Sign Up
-                  </Text>
-                </LinearGradient>
+                style={styles.formControlBtn}
+                onPress={() => this.setState({page: this.state.page + 1})}>
+                <FontAwesome
+                  name="angle-right"
+                  color={COLORS.DEFAULT_WHITE}
+                  size={25}
+                />
               </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => this.props.navigation.goBack()}
-                style={[
-                  styles.signIn,
-                  {
-                    borderColor: '#009387',
-                    borderWidth: 1,
-                    marginTop: 15,
-                  },
-                ]}>
-                <Text
-                  style={[
-                    styles.textSign,
-                    {
-                      color: '#009387',
-                    },
-                  ]}>
-                  Sign In
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
+            ) : (
+              <View />
+            )}
+          </View>
+          {/* </ScrollView> */}
         </Animatable.View>
       </View>
     );
@@ -313,7 +401,7 @@ export default SignUpScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#009387',
+    backgroundColor: COLORS.THEME_GREEN,
   },
   header: {
     flex: 1,
@@ -322,34 +410,35 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   footer: {
-    flex: Platform.OS === 'ios' ? 3 : 5,
-    backgroundColor: '#fff',
+    // flex: Platform.OS === 'ios' ? 3 : 5,
+    flex: 3,
+    backgroundColor: COLORS.DEFAULT_WHITE,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingHorizontal: 20,
     paddingVertical: 30,
   },
   text_header: {
-    color: '#fff',
+    color: COLORS.DEFAULT_WHITE,
     fontWeight: 'bold',
     fontSize: 30,
   },
   text_footer: {
-    color: '#05375a',
-    fontSize: 18,
+    color: COLORS.THEME_GREEN,
+    fontSize: Scale(18),
+    textTransform: 'uppercase',
+    fontWeight: '600',
+    marginBottom: verticalScale(5),
   },
   action: {
     flexDirection: 'row',
     marginTop: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f2f2f2',
-    paddingBottom: 5,
   },
   textInput: {
     flex: 1,
     marginTop: Platform.OS === 'ios' ? 0 : -12,
     paddingLeft: 10,
-    color: '#05375a',
+    color: COLORS.THEME_DARK_GREEN,
   },
   button: {
     alignItems: 'center',
@@ -372,6 +461,38 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   color_textPrivate: {
-    color: 'grey',
+    color: COLORS.SMOKY_GREY,
+  },
+  formControlView: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    position: 'absolute',
+    bottom: verticalScale(15),
+    width: '100%',
+    alignSelf: 'center',
+  },
+  formControlBtn: {
+    backgroundColor: COLORS.THEME_GREEN,
+    width: 50,
+    height: 50,
+    borderRadius: Scale(25),
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  formBtnText: {
+    color: COLORS.DEFAULT_WHITE,
+    fontSize: Scale(16),
+    paddingHorizontal: Scale(10),
+  },
+  viewSeperator: {
+    borderBottomWidth: 1.5,
+    borderBottomColor: COLORS.THEME_BORDER_GREEN,
+    paddingBottom: Scale(5),
+    marginTop: Scale(5),
+    marginBottom: verticalScale(10),
   },
 });

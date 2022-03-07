@@ -100,11 +100,11 @@ class LoginScreen extends Component {
   }
 
   loginHandle(email, password) {
-    // add login check logic here
     const data = {
       email: email,
       password: password,
     };
+    // this.props.navigation.navigate('Home');
   }
 
   render() {
@@ -195,13 +195,10 @@ class LoginScreen extends Component {
             </TouchableOpacity>
 
             <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Signup')}
               style={[
                 styles.signIn,
-                {
-                  borderColor: '#009387',
-                  borderWidth: 1,
-                  marginTop: 15,
-                },
+                {borderColor: '#009387', borderWidth: 1, marginTop: 15},
               ]}>
               <Text
                 style={[
