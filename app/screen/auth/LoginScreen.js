@@ -104,7 +104,7 @@ class LoginScreen extends Component {
       email: email,
       password: password,
     };
-    // this.props.navigation.navigate('Home');
+    this.props.navigation.navigate('Browse');
   }
 
   render() {

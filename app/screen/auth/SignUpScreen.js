@@ -33,6 +33,8 @@ class SignUpScreen extends Component {
         secureTextEntry: true,
         confirm_secureTextEntry: true,
         nationality: '',
+        citizen: '',
+        gender: '',
       },
       page: 1,
     };
@@ -198,7 +200,10 @@ class SignUpScreen extends Component {
                 {
                   color: '#fff',
                 },
-              ]}>
+              ]}
+              onPress={() => {
+                this.props.navigation.navigate('Browse');
+              }}>
               Sign Up
             </Text>
           </LinearGradient>
@@ -308,7 +313,18 @@ class SignUpScreen extends Component {
     return (
       <View>
         <Text style={[styles.text_footer]}>Citizen Status</Text>
-        <RadioButton DropData={Constant.Citizen} />
+        <RadioButton
+          DropData={Constant.Citizen}
+          value={this.state.data.citizen}
+          setValue={text =>
+            this.setState({
+              data: {
+                ...this.state.data,
+                citizen: text,
+              },
+            })
+          }
+        />
         <View style={styles.viewSeperator} />
 
         <Text style={[styles.text_footer]}>Mobile Number</Text>
@@ -335,7 +351,18 @@ class SignUpScreen extends Component {
         </View>
 
         <Text style={[styles.text_footer]}>Gender</Text>
-        <RadioButton DropData={Constant.Gender} />
+        <RadioButton
+          DropData={Constant.Gender}
+          value={this.state.data.gender}
+          setValue={text =>
+            this.setState({
+              data: {
+                ...this.state.data,
+                gender: text,
+              },
+            })
+          }
+        />
         <View style={styles.viewSeperator} />
       </View>
     );

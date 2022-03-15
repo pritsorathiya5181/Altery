@@ -27,3 +27,18 @@ export const Gender = [
     text: 'Other',
   },
 ];
+
+export const Severity = [
+  {
+    key: 'one',
+    text: 'One',
+  },
+  {
+    key: 'two',
+    text: 'Two',
+  },
+  {
+    key: 'three',
+    text: 'Three',
+  },
+];

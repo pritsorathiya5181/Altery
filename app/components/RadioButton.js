@@ -3,35 +3,29 @@ import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import Scale, {verticalScale} from '../utils/Scale';
 import * as COLORS from '../utils/Colors';
 
-export default class RadioButton extends Component {
-  state = {
-    value: null,
-  };
-  render() {
-    const {DropData} = this.props;
-    const {value} = this.state;
-    return (
-      <View>
-        {DropData.map(res => {
-          return (
-            <View key={res.key} style={styles.container}>
-              <Text style={styles.radioText}>{res.text}</Text>
-              <TouchableOpacity
-                style={styles.radioCircle}
-                onPress={() => {
-                  this.setState({
-                    value: res.key,
-                  });
-                }}>
-                {value === res.key && <View style={styles.selectedRb} />}
-              </TouchableOpacity>
-            </View>
-          );
-        })}
-      </View>
-    );
-  }
-}
+const RadioButton = props => {
+  return (
+    <View>
+      {props?.DropData?.map(res => {
+        return (
+          <View key={res.key} style={styles.container}>
+            <Text style={styles.radioText}>{res.text}</Text>
+            <TouchableOpacity
+              style={styles.radioCircle}
+              onPress={() => {
+                props?.setValue(res.key);
+              }}>
+              {props?.value === res.key && <View style={styles.selectedRb} />}
+            </TouchableOpacity>
+          </View>
+        );
+      })}
+    </View>
+  );
+};
+
+export default RadioButton;
+
 const styles = StyleSheet.create({
   container: {
     marginBottom: verticalScale(5),
