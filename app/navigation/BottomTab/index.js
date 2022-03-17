@@ -77,7 +77,7 @@ export default class BottomTab extends React.Component {
           <View style={styles.iconView}>
             <TouchableOpacity
               onPress={() => {
-                this.gotoRoute('Schedule');
+                this.gotoRoute('Profile');
               }}
               style={styles.centerView}>
               {this.props.state.index === 2 ? (

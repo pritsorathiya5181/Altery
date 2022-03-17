@@ -27,12 +27,12 @@ class SignUpScreen extends Component {
         firstname: '',
         lastname: '',
         email: '',
+        mobileNo: '',
         password: '',
         confirm_password: '',
         check_textInputChange: false,
         secureTextEntry: true,
         confirm_secureTextEntry: true,
-        nationality: '',
         citizen: '',
         gender: '',
       },
@@ -246,7 +246,7 @@ class SignUpScreen extends Component {
           ]}>
           Password
         </Text>
-        <View style={styles.action}>
+        <View style={[styles.action, styles.viewSeperator]}>
           <Feather name="lock" color="#05375a" size={20} />
           <TextInput
             placeholder="Your Password"
@@ -273,7 +273,7 @@ class SignUpScreen extends Component {
           ]}>
           Confirm Password
         </Text>
-        <View style={styles.action}>
+        <View style={[styles.action, styles.viewSeperator]}>
           <Feather name="lock" color="#05375a" size={20} />
           <TextInput
             placeholder="Confirm Your Password"
@@ -339,11 +339,12 @@ class SignUpScreen extends Component {
             style={styles.textInput}
             autoCapitalize="none"
             underlineColorAndroid="transparent"
+            keyboardType="numeric"
             onChangeText={val =>
               this.setState({
                 data: {
                   ...this.state.data,
-                  firstname: val,
+                  mobileNo: val,
                 },
               })
             }

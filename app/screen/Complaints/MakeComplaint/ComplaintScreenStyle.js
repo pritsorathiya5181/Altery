@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.DEFAULT_WHITE,
     paddingHorizontal: 15,
     paddingTop: 20,
-    paddingBottom: 50,
   },
   titleText: {
     color: COLORS.THEME_GREEN,

@@ -168,11 +168,12 @@ class LoginScreen extends Component {
             </Animatable.View>
           )}
 
-          {/* <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('ForgotPass')}>
             <Text style={{color: '#009387', marginTop: 15}}>
               Forgot password?
             </Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
           <View style={styles.button}>
             <TouchableOpacity
               style={styles.signIn}

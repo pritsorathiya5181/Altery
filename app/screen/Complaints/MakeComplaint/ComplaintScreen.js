@@ -6,16 +6,22 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Modal,
+  Pressable,
+  Alert,
 } from 'react-native';
 import styles from './ComplaintScreenStyle';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import RadioButton from '../../../components/RadioButton';
 import * as Constant from '../../../utils/Constant';
+import CategorySelector from '../../../components/Category/CategorySelector';
 
-const ComplaintScreen = () => {
+const ComplaintScreen = props => {
+  const [modalVisible, setModalVisible] = useState(false);
   const [subject, setSubject] = useState('');
   const [severity, setSeverity] = useState('');
+  const [category, setCategory] = useState();
   const [photos, setPhotos] = useState([
     {
       photoId: 0,
@@ -50,8 +56,10 @@ const ComplaintScreen = () => {
       <View>
         <Text style={styles.titleText}>Catrogry</Text>
         <View style={styles.action}>
-          <TouchableOpacity style={styles.categoryView}>
-            <Text>Cyber Crime</Text>
+          <TouchableOpacity
+            style={styles.categoryView}
+            onPress={() => setModalVisible(true)}>
+            <Text>{category?.text ? category?.text : 'Cyber Crime'}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -106,7 +114,7 @@ const ComplaintScreen = () => {
                 <Image
                   alt="serviceImg"
                   className="serviceImg"
-                  src={item.photoUrl}
+                  source={{uri: item.photoUrl}}
                 />
               </View>
             ) : (
@@ -120,6 +128,22 @@ const ComplaintScreen = () => {
           })}
         </View>
       </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <CategorySelector
+          onClose={() => setModalVisible(false)}
+          setCategory={cate => {
+            setCategory(cate);
+            setModalVisible(false);
+          }}
+        />
+      </Modal>
     </ScrollView>
   );
 };
