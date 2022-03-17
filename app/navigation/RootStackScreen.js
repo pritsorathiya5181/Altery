@@ -15,6 +15,7 @@ import ChangePasswordScreen from '../screen/auth/ChangePassword/ChangePasswordSc
 import CategorySelector from '../components/Category/CategorySelector';
 import ForgotPasswordScreen from '../screen/auth/Forgot/ForgotPasswordScreen';
 import ResetPasswordScreen from '../screen/auth/ResetPassword/ResetPasswordScreen';
+import EditProfileScreen from '../screen/auth/Profile/EditProfile/EditProfileScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -46,6 +47,7 @@ const RootStackScreen = () => {
       <Stack.Screen name="Complaint" component={ComplaintScreen} />
       <Stack.Screen name="Details" component={ComplaintDetailsScreen} />
       <Stack.Screen name="CategoryOptions" component={CategorySelector} />
+      <Stack.Screen name="EditProfile" component={EditProfileScreen} />
     </Stack.Navigator>
   );
 };

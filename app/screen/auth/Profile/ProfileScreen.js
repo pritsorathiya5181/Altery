@@ -17,6 +17,10 @@ const ProfileScreen = props => {
     props.navigation.navigate('ChnagePass');
   };
 
+  const naviagetToEditProfile = () => {
+    props.navigation.navigate('EditProfile');
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -66,7 +70,9 @@ const ProfileScreen = props => {
             onPress={() => naviagetToChangePass()}>
             <Text style={styles.btnText}>Change Password</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.profileBtn}>
+          <TouchableOpacity
+            style={styles.profileBtn}
+            onPress={() => naviagetToEditProfile()}>
             <Text style={styles.btnText}>Edit Profile</Text>
           </TouchableOpacity>
         </ScrollView>

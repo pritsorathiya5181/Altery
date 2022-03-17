@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {isIphoneX} from 'react-native-iphone-x-helper';
+import * as COLORS from '../../utils/Colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -7,12 +8,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    backgroundColor: 'white',
+    backgroundColor: COLORS.THEME_GREEN,
     borderTopWidth: 0.5,
     borderTopColor: '#DCDCDC',
   },
   paddingView: {
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.DEFAULT_WHITE,
     paddingBottom: isIphoneX() ? 34 : 0,
   },
   iconView: {

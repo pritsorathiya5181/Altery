@@ -34,17 +34,17 @@ export default class BottomTab extends React.Component {
               style={styles.centerView}>
               {this.props.state.index === 0 ? (
                 <View style={styles.view31}>
-                  <FontAwesome name="home" size={25} />
+                  <FontAwesome name="home" size={25} color="#009387" />
                 </View>
               ) : (
                 <View style={[styles.boxView]}>
-                  <Feather name="home" size={25} />
+                  <Feather name="home" size={25} color="white" />
                 </View>
               )}
               <Text
                 style={[
                   styles.font12,
-                  {color: this.props.state.index === 0 ? '#30354E' : '#7D7D7D'},
+                  {color: this.props.state.index === 0 ? '#fff' : '#fff'},
                 ]}>
                 Home
               </Text>
@@ -58,17 +58,17 @@ export default class BottomTab extends React.Component {
               style={styles.centerView}>
               {this.props.state.index === 1 ? (
                 <View style={styles.view31}>
-                  <Ionicons name="list-sharp" size={25} />
+                  <Ionicons name="list-sharp" size={25} color="#009387" />
                 </View>
               ) : (
                 <View style={[styles.boxView]}>
-                  <Ionicons name="list-outline" size={25} />
+                  <Ionicons name="list-outline" size={25} color="white" />
                 </View>
               )}
               <Text
                 style={[
                   styles.font12,
-                  {color: this.props.state.index === 2 ? '#30354E' : '#7D7D7D'},
+                  {color: this.props.state.index === 2 ? '#fff' : '#fff'},
                 ]}>
                 Requestes
               </Text>
@@ -82,20 +82,25 @@ export default class BottomTab extends React.Component {
               style={styles.centerView}>
               {this.props.state.index === 2 ? (
                 <View style={styles.view31}>
-                  <MaterialCommunityIcons name="account-details" size={25} />
+                  <MaterialCommunityIcons
+                    name="account-details"
+                    size={25}
+                    color="#009387"
+                  />
                 </View>
               ) : (
                 <View style={[styles.boxView]}>
                   <MaterialCommunityIcons
                     name="account-details-outline"
                     size={25}
+                    color="white"
                   />
                 </View>
               )}
               <Text
                 style={[
                   styles.font12,
-                  {color: this.props.state.index === 1 ? '#30354E' : '#7D7D7D'},
+                  {color: this.props.state.index === 1 ? '#fff' : '#fff'},
                 ]}>
                 Profile
               </Text>
