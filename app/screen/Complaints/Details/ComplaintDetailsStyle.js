@@ -22,6 +22,9 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 15,
   },
+  backArrow: {
+    paddingHorizontal: 10,
+  },
   headerTitle: {
     flex: 1,
     textAlign: 'center',

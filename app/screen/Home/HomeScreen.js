@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   View,
   StatusBar,
@@ -9,8 +9,67 @@ import {
 import styles from './HomeScreenStyle';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {bindActionCreators} from 'redux';
+import * as complaintsActions from '../../action/complaintsActions';
+import {connect} from 'react-redux';
+import {useFocusEffect} from '@react-navigation/native';
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = props => {
+  const [complaintsData, setComplaintsData] = useState([]);
+  const [openComplaintsData, setOpenComplaintsData] = useState([]);
+  const [closeComplaintsData, setCloseComplaintsData] = useState([]);
+  const [pendingComplaintsData, setPendingComplaintsData] = useState([]);
+
+  useEffect(() => {
+    getComplaints();
+  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getComplaints();
+    }, []),
+  );
+
+  const getComplaints = () => {
+    props.action
+      .getAllComplaints()
+      .then(res => {
+        if (res.success) {
+          setComplaintsData(res.complaints);
+          generateComplaintsStats(res.complaints);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const generateComplaintsStats = complaints => {
+    const openComplaints = [];
+    const closeComplaints = [];
+    const pendingComplaints = [];
+
+    complaints?.map(complaint => {
+      if (complaint.complaintStatus === 'pending') {
+        pendingComplaints.push(complaint);
+      } else if (complaint.complaintStatus === 'open') {
+        openComplaints.push(complaint);
+      } else if (complaint.complaintStatus === 'done') {
+        closeComplaints.push(complaint);
+      }
+    });
+
+    setOpenComplaintsData(openComplaints);
+    setCloseComplaintsData(closeComplaints);
+    setPendingComplaintsData(pendingComplaints);
+  };
+
+  const viewComplaints = complaints => {
+    props.navigation.navigate('complaintsListing', {
+      complaints: complaints,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#009387" barStyle="light-content" />
@@ -18,37 +77,60 @@ const HomeScreen = ({navigation}) => {
         <Text style={styles.headerTitle}>Complaint Portal</Text>
       </View>
       <View style={styles.footer}>
-        <ScrollView>
-          <View style={styles.totalComplaintView}>
-            <Text style={styles.totalCountText}>15</Text>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <TouchableOpacity
+            style={styles.totalComplaintView}
+            onPress={() => viewComplaints(complaintsData)}>
+            <Text style={styles.totalCountText}>{complaintsData?.length}</Text>
             <View style={styles.row}>
               <Text style={styles.totalTitleText}>Total Complaints</Text>
               <FontAwesome5 name="boxes" color={'white'} size={25} />
             </View>
-          </View>
+          </TouchableOpacity>
 
-          <View style={styles.multipleComplaintView}>
-            <View style={styles.openCompaintView}>
-              <Text style={styles.totalCountText}>15</Text>
-              <View style={styles.row}>
-                <Text style={styles.totalTitleText}>Open{'\n'}Complaints</Text>
-                <FontAwesome5
-                  name="envelope-open-text"
-                  color={'white'}
-                  size={25}
-                />
-              </View>
+          {/* <View style={styles.multipleComplaintView}> */}
+          <TouchableOpacity
+            style={styles.openCompaintView}
+            onPress={() => viewComplaints(openComplaintsData)}>
+            <Text style={styles.totalCountText}>
+              {openComplaintsData?.length}
+            </Text>
+            <View style={styles.row}>
+              <Text style={styles.totalTitleText}>Open Complaints</Text>
+              <FontAwesome5
+                name="envelope-open-text"
+                color={'white'}
+                size={25}
+              />
             </View>
-            <View style={styles.closeCompaintView}>
-              <Text style={styles.totalCountText}>15</Text>
-              <View style={styles.row}>
-                <Text style={styles.totalTitleText}>Close{'\n'}Complaints</Text>
-                <FontAwesome5 name="envelope-open" color={'white'} size={25} />
-              </View>
-            </View>
-          </View>
+          </TouchableOpacity>
 
-          <Text style={styles.feedBackText}>Feedbacks</Text>
+          <TouchableOpacity
+            style={styles.pendingFeedbackView}
+            onPress={() => viewComplaints(pendingComplaintsData)}>
+            <Text style={styles.totalCountText}>
+              {pendingComplaintsData?.length}
+            </Text>
+            <View style={styles.row}>
+              <Text style={styles.totalTitleText}>Pending Complaint</Text>
+              <Ionicons name="ios-timer-outline" color={'white'} size={25} />
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.closeCompaintView}
+            onPress={() => viewComplaints(closeComplaintsData)}>
+            <Text style={styles.totalCountText}>
+              {closeComplaintsData?.length}
+            </Text>
+            <View style={styles.row}>
+              <Text style={styles.totalTitleText}>Close Complaints</Text>
+              <FontAwesome5 name="envelope-open" color={'white'} size={25} />
+            </View>
+          </TouchableOpacity>
+          {/* </View> */}
+
+          {/* <Text style={styles.feedBackText}>Feedbacks</Text>
           <View style={styles.multipleComplaintView}>
             <View style={styles.positiveFeedbackView}>
               <Text style={styles.totalCountText}>15</Text>
@@ -88,7 +170,7 @@ const HomeScreen = ({navigation}) => {
                 <Ionicons name="ios-trash-bin" color={'white'} size={25} />
               </View>
             </View>
-          </View>
+          </View> */}
         </ScrollView>
       </View>
 
@@ -96,7 +178,7 @@ const HomeScreen = ({navigation}) => {
         activeOpacity={0.6}
         style={styles.addView}
         onPress={() => {
-          navigation.navigate('Complaint');
+          props.navigation.navigate('Complaint');
         }}>
         <Ionicons name="add-outline" size={30} color="white" />
       </TouchableOpacity>
@@ -104,4 +186,19 @@ const HomeScreen = ({navigation}) => {
   );
 };
 
-export default HomeScreen;
+function mapStateToProps(state) {
+  console.log('state-->', state);
+  if (state) {
+    return {
+      complaintsData: state.home.complaintsData,
+    };
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    action: bindActionCreators(complaintsActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

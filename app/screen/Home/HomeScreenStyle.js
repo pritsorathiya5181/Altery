@@ -55,15 +55,17 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(20),
   },
   openCompaintView: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: '#DB2955',
     padding: Scale(15),
-    marginRight: 10,
+    marginTop: verticalScale(10),
+    // marginRight: 10,
   },
   closeCompaintView: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: '#F88961',
     padding: Scale(15),
+    marginTop: verticalScale(10),
   },
   feedBackText: {
     fontSize: Scale(18),
@@ -84,10 +86,11 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   pendingFeedbackView: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: '#FBC668',
     padding: Scale(15),
-    marginRight: 10,
+    marginTop: verticalScale(10),
+    // marginRight: 10,
   },
   addView: {
     height: 50,

@@ -1,106 +1,31 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StatusBar, FlatList, TouchableOpacity} from 'react-native';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import styles from './ComplaintListingStyle';
+import * as complaintsActions from '../../../action/complaintsActions';
+import * as Constant from '../../../utils/Constant';
+import {useFocusEffect} from '@react-navigation/native';
 
-function ComplaintListingScreen({navigation}) {
-  const [conplaintList, setconplaintList] = useState([
-    {
-      complaintId: 'C01123213',
-      subject: 'Regarding noice',
-      category: 'Cyber crime',
-      level: 'three',
-      complaintDetails:
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-      complaintLocation: 'Halifax, NS, B3L 4P7',
-      photos: [
-        {
-          photoId: 0,
-          isPhoto: false,
-        },
-        {
-          photoId: 1,
-          isPhoto: true,
-          photoUrl:
-            'https://www2.gov.bc.ca/assets/gov/careers/all-employees/pay-and-benefits/propass/bc_transit_image.jpg',
-        },
-      ],
-    },
-    {
-      complaintId: 'C01123214',
-      subject: 'Regarding noice',
-      category: 'Cyber crime',
-      level: 'three',
-      complaintDetails:
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-      complaintLocation: 'Halifax, NS, B3L 4P7',
-      photos: [
-        {
-          photoId: 0,
-          isPhoto: false,
-        },
-      ],
-    },
-    {
-      complaintId: 'C01123215',
-      subject: 'Regarding noice',
-      category: 'Cyber crime',
-      level: 'three',
-      complaintDetails:
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-      complaintLocation: 'Halifax, NS, B3L 4P7',
-      photos: [
-        {
-          photoId: 0,
-          isPhoto: false,
-        },
-      ],
-    },
-    {
-      complaintId: 'C01123216',
-      subject: 'Regarding noice',
-      category: 'Cyber crime',
-      level: 'three',
-      complaintDetails:
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-      complaintLocation: 'Halifax, NS, B3L 4P7',
-      photos: [
-        {
-          photoId: 0,
-          isPhoto: false,
-        },
-      ],
-    },
-    {
-      complaintId: 'C01123217',
-      subject: 'Regarding noice',
-      category: 'Cyber crime',
-      level: 'three',
-      complaintDetails:
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-      complaintLocation: 'Halifax, NS, B3L 4P7',
-      photos: [
-        {
-          photoId: 0,
-          isPhoto: false,
-        },
-      ],
-    },
-    {
-      complaintId: 'C01123218',
-      subject: 'Regarding noice',
-      category: 'Cyber crime',
-      level: 'three',
-      complaintDetails:
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-      complaintLocation: 'Halifax, NS, B3L 4P7',
-      photos: [
-        {
-          photoId: 0,
-          isPhoto: false,
-        },
-      ],
-    },
-  ]);
+function ComplaintListingScreen({route, navigation}) {
+  const [conplaintList, setconplaintList] = useState([]);
+
+  useEffect(() => {
+    console.log(route?.params?.complaints);
+    setconplaintList(route?.params?.complaints || Constant.COMPLAINT_LISTING);
+  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log(route);
+      setconplaintList(route?.params?.complaints || Constant.COMPLAINT_LISTING);
+      return () => {
+        if (route.params && 'complaints' in route.params) {
+          delete route.params;
+        }
+      };
+    }, []),
+  );
 
   const openComplaitDetails = item => {
     navigation.navigate('Details', {complaint: item});
@@ -140,4 +65,22 @@ function ComplaintListingScreen({navigation}) {
   );
 }
 
-export default ComplaintListingScreen;
+function mapStateToProps(state) {
+  console.log('state-->', state);
+  if (state) {
+    return {
+      complaintsData: state.home.complaintsData,
+    };
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    action: bindActionCreators(complaintsActions, dispatch),
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ComplaintListingScreen);
