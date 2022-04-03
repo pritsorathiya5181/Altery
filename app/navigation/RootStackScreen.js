@@ -16,6 +16,7 @@ import CategorySelector from '../components/Category/CategorySelector';
 import ForgotPasswordScreen from '../screen/auth/Forgot/ForgotPasswordScreen';
 import ResetPasswordScreen from '../screen/auth/ResetPassword/ResetPasswordScreen';
 import EditProfileScreen from '../screen/auth/Profile/EditProfile/EditProfileScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -36,7 +37,7 @@ const RootStackScreen = () => {
   return (
     <Stack.Navigator
       screenOptions={{headerShown: false}}
-      initialRouteName={'Browse'}>
+      initialRouteName={'Splash'}>
       <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Signup" component={SignUpScreen} />

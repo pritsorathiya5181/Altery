@@ -65,11 +65,11 @@ const ProfileScreen = props => {
 
           <Text style={styles.titleText}>Profile Options</Text>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.profileBtn}
             onPress={() => naviagetToChangePass()}>
             <Text style={styles.btnText}>Change Password</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             style={styles.profileBtn}
             onPress={() => naviagetToEditProfile()}>

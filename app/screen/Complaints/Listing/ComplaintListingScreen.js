@@ -12,20 +12,20 @@ function ComplaintListingScreen({route, navigation}) {
 
   useEffect(() => {
     console.log(route?.params?.complaints);
-    setconplaintList(route?.params?.complaints || Constant.COMPLAINT_LISTING);
-  }, []);
+    setconplaintList(route?.params?.complaints);
+  }, [route?.params?.complaints]);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      console.log(route);
-      setconplaintList(route?.params?.complaints || Constant.COMPLAINT_LISTING);
-      return () => {
-        if (route.params && 'complaints' in route.params) {
-          delete route.params;
-        }
-      };
-    }, []),
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     console.log(route);
+  //     setconplaintList(route?.params?.complaints);
+  //     return () => {
+  //       if (route.params && 'complaints' in route.params) {
+  //         delete route.params;
+  //       }
+  //     };
+  //   }, []),
+  // );
 
   const openComplaitDetails = item => {
     navigation.navigate('Details', {complaint: item});

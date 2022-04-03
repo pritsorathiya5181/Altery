@@ -7,6 +7,8 @@ import {
   Platform,
   StyleSheet,
   StatusBar,
+  Alert,
+  ScrollView,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
@@ -18,6 +20,10 @@ import * as COLORS from '../../utils/Colors';
 import Scale, {verticalScale} from '../../utils/Scale';
 import * as Constant from '../../utils/Constant';
 import RadioButton from '../../components/RadioButton';
+import Dialog from 'react-native-dialog';
+import * as authAction from '../../action/authAction';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 
 class SignUpScreen extends Component {
   constructor(props) {
@@ -35,6 +41,8 @@ class SignUpScreen extends Component {
         confirm_secureTextEntry: true,
         citizen: '',
         gender: '',
+        confirmAlert: false,
+        verificationCode: '',
       },
       page: 1,
     };
@@ -99,18 +107,54 @@ class SignUpScreen extends Component {
   signInHandle(firstname, lastname, email, password) {
     // add login check logic here
     const data = {
-      email: email,
-      password: password,
-      first_name: firstname,
-      last_name: lastname,
+      firstname: this.state.data.firstname,
+      lastname: this.state.data.lastname,
+      email: this.state.data.email,
+      mobileNo: this.state.data.mobileNo,
+      password: this.state.data.password,
+      citizen: this.state.data.citizen,
+      gender: this.state.data.gender,
     };
+
+    this.props.action
+      .userSignup(data)
+      .then(userData => {
+        console.log('data', userData);
+        this.setState({
+          confirmAlert: true,
+        });
+      })
+      .catch(error => {
+        Alert.alert('Error', 'Unable to signup');
+      });
+  }
+
+  confirm_signupHandle() {
+    const data = {
+      username: this.state.data.email,
+      code: this.state.verificationCode,
+    };
+
+    this.props.action
+      .confirmSignup(data)
+      .then(userData => {
+        if (userData.success) {
+          console.log('data', userData);
+          this.props.navigation.navigate('Login');
+        } else {
+          Alert.alert('Error', 'Validation failed');
+        }
+      })
+      .catch(error => {
+        Alert.alert('Error', 'Validation failed');
+      });
   }
 
   registerFirstPage() {
     const {data} = this.state;
 
     return (
-      <>
+      <ScrollView>
         <Text style={styles.text_footer}>First Name</Text>
         <View style={[styles.action, styles.viewSeperator]}>
           <FontAwesome name="user-o" color="#05375a" size={20} />
@@ -175,7 +219,7 @@ class SignUpScreen extends Component {
             </Animatable.View>
           ) : null}
         </View>
-      </>
+      </ScrollView>
     );
   }
 
@@ -200,10 +244,7 @@ class SignUpScreen extends Component {
                 {
                   color: '#fff',
                 },
-              ]}
-              onPress={() => {
-                this.props.navigation.navigate('Browse');
-              }}>
+              ]}>
               Sign Up
             </Text>
           </LinearGradient>
@@ -419,12 +460,52 @@ class SignUpScreen extends Component {
           </View>
           {/* </ScrollView> */}
         </Animatable.View>
+        <View>
+          <Dialog.Container visible={this.state.confirmAlert}>
+            <Dialog.Title>Verify Code</Dialog.Title>
+            <Dialog.Description>
+              You may have received a verification code on your email.
+            </Dialog.Description>
+            <Dialog.Input
+              label="Verification Code"
+              onChangeText={code => this.setState({verificationCode: code})}
+              value={this.state.verificationCode}
+            />
+            <Dialog.Button
+              label="Cancel"
+              onPress={() => {
+                this.setState({confirmAlert: false});
+              }}
+            />
+            <Dialog.Button
+              label="Okay"
+              onPress={() => {
+                this.confirm_signupHandle();
+              }}
+            />
+          </Dialog.Container>
+        </View>
       </View>
     );
   }
 }
 
-export default SignUpScreen;
+function mapStateToProps(state) {
+  console.log('state-->', state);
+  if (state) {
+    return {
+      signupUserData: state.auth.signupUserData,
+    };
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    action: bindActionCreators(authAction, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpScreen);
 
 const styles = StyleSheet.create({
   container: {

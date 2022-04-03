@@ -1,13 +1,39 @@
 import React, {useState} from 'react';
-import {View, Text, StatusBar, TextInput, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StatusBar,
+  Alert,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import styles from './ForgotPasswordStyle';
+import * as authAction from '../../../action/authAction';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 
 const ForgotPasswordScreen = props => {
   const [email, setEmail] = useState('');
+
+  const handleForgoutPass = () => {
+    props.action
+      .forgotPassword({
+        username: email,
+      })
+      .then(forgotData => {
+        console.log('data', forgotData);
+        props.navigation.navigate('ResetPass', {
+          email: email,
+        });
+      })
+      .catch(error => {
+        Alert.alert('Error', 'Unable to forgot password');
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -34,7 +60,7 @@ const ForgotPasswordScreen = props => {
           <TouchableOpacity
             style={styles.signIn}
             onPress={() => {
-              props.navigation.navigate('ResetPass');
+              handleForgoutPass();
             }}>
             <LinearGradient
               colors={['#08d4c4', '#01ab9d']}
@@ -68,4 +94,22 @@ const ForgotPasswordScreen = props => {
   );
 };
 
-export default ForgotPasswordScreen;
+function mapStateToProps(state) {
+  console.log('state-->', state);
+  if (state) {
+    return {
+      signupUserData: state.auth.signupUserData,
+    };
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    action: bindActionCreators(authAction, dispatch),
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ForgotPasswordScreen);

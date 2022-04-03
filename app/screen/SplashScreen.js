@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as React from 'react';
 import {
   View,
@@ -13,11 +14,22 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const SplashScreen = ({navigation}) => {
   const nextNavigateScreen = async () => {
+    AsyncStorage.getItem('accessToken')
+      .then(token => {
+        console.log(token);
+        if (token) {
+          navigation.navigate('Browse');
+        } else {
+          navigation.navigate('Login');
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
     //   const userToken = await AsyncStorage.getItem('USER_TOKEN');
     //   if (userToken) {
     //     navigation.navigate('Home');
     //   } else {
-    navigation.navigate('Login');
     //   }
   };
 

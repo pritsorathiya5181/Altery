@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import styles from './ComplaintScreenStyle';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {launchImageLibrary} from 'react-native-image-picker';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -73,6 +73,7 @@ const ComplaintScreen = props => {
 
   const onAddComplaint = () => {
     const newComplaint = {
+      complaintId: new Date().getTime().toString(),
       subject: subject,
       severity: severity,
       category: category,
@@ -80,6 +81,8 @@ const ComplaintScreen = props => {
       location: location,
       photos: photos,
       complaintStatus: 'pending',
+      username: 'mark',
+      useremail: 'mark@gmail.com',
     };
     console.log('newComplaint-->', newComplaint);
 

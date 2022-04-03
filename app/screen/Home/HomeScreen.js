@@ -65,6 +65,9 @@ const HomeScreen = props => {
   };
 
   const viewComplaints = complaints => {
+    props.navigation.setParams({
+      complaints: complaints,
+    });
     props.navigation.navigate('complaintsListing', {
       complaints: complaints,
     });

@@ -13,7 +13,7 @@ export function getAllComplaints() {
           redirect: 'follow',
         };
 
-        fetch(`${BASE_URL}complaints/find`, requestOptions)
+        fetch(`${BASE_URL}findcomplaints`, requestOptions)
           .then(response => response.json())
           .then(result => {
             console.log(result);
@@ -60,7 +60,7 @@ export function makeComplaint(value) {
           redirect: 'follow',
         };
 
-        fetch(`${BASE_URL}complaints/addComplaints`, requestOptions)
+        fetch(`${BASE_URL}addcomplaints`, requestOptions)
           .then(response => response.json())
           .then(result => {
             console.log('add complaint logs====', result);

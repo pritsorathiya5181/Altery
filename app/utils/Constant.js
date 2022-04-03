@@ -1,4 +1,7 @@
-export const BASE_URL = 'http://134.190.181.34:5000/api/';
+// export const BASE_URL = 'http://192.168.2.19:5000/api/';
+export const BASE_URL =
+  'https://63gawwalt7.execute-api.us-east-1.amazonaws.com/prod/';
+export const LOGIN_BASE_URL = 'http://192.168.2.19:5055/';
 
 export const Citizen = [
   {

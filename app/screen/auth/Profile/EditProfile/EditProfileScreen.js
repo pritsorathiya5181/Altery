@@ -181,7 +181,7 @@ const EditProfileScreen = props => {
         <View style={styles.headerRow}>
           <TouchableOpacity
             style={styles.iconView}
-            onPress={() => props.onClose()}>
+            onPress={() => props.navigation.navigate('Profile')}>
             <Ionicons name="arrow-back" color={'white'} size={25} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Edit Profile</Text>

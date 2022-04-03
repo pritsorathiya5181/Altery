@@ -13,6 +13,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import * as Validators from '../../utils/Validators';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import * as authAction from '../../action/authAction';
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -101,10 +104,19 @@ class LoginScreen extends Component {
 
   loginHandle(email, password) {
     const data = {
-      email: email,
+      username: email,
       password: password,
     };
-    this.props.navigation.navigate('Browse');
+
+    this.props.action
+      .userLogin(data)
+      .then(userData => {
+        console.log('data', userData);
+        this.props.navigation.navigate('Browse');
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   render() {
@@ -218,7 +230,22 @@ class LoginScreen extends Component {
   }
 }
 
-export default LoginScreen;
+function mapStateToProps(state) {
+  console.log('state-->', state);
+  if (state) {
+    return {
+      userLoginData: state.auth.userLoginData,
+    };
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    action: bindActionCreators(authAction, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
 
 const styles = StyleSheet.create({
   container: {
