@@ -20,6 +20,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import RadioButton from '../../../components/RadioButton';
 import * as Constant from '../../../utils/Constant';
 import CategorySelector from '../../../components/Category/CategorySelector';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ComplaintScreen = props => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -71,7 +72,12 @@ const ComplaintScreen = props => {
     });
   };
 
-  const onAddComplaint = () => {
+  const onAddComplaint = async () => {
+    let userData = await AsyncStorage.getItem('userInfo');
+    if (userData) {
+      userData = JSON.parse(userData);
+    }
+
     const newComplaint = {
       complaintId: new Date().getTime().toString(),
       subject: subject,
@@ -81,8 +87,8 @@ const ComplaintScreen = props => {
       location: location,
       photos: photos,
       complaintStatus: 'pending',
-      username: 'mark',
-      useremail: 'mark@gmail.com',
+      username: userData.name,
+      useremail: userData.email,
     };
     console.log('newComplaint-->', newComplaint);
 

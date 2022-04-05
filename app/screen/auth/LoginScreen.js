@@ -16,6 +16,7 @@ import * as Validators from '../../utils/Validators';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as authAction from '../../action/authAction';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -112,7 +113,11 @@ class LoginScreen extends Component {
       .userLogin(data)
       .then(userData => {
         console.log('data', userData);
-        this.props.navigation.navigate('Browse');
+        if (userData?.success === false) {
+          alert('Invalid email or password');
+        } else {
+          this.props.navigation.navigate('Browse');
+        }
       })
       .catch(err => {
         console.log(err);

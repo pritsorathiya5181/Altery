@@ -13,6 +13,7 @@ import {bindActionCreators} from 'redux';
 import * as complaintsActions from '../../action/complaintsActions';
 import {connect} from 'react-redux';
 import {useFocusEffect} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = props => {
   const [complaintsData, setComplaintsData] = useState([]);
@@ -30,13 +31,26 @@ const HomeScreen = props => {
     }, []),
   );
 
-  const getComplaints = () => {
+  const getComplaints = async () => {
+    let userData = await AsyncStorage.getItem('userInfo');
+    if (userData) {
+      userData = JSON.parse(userData);
+    }
+
     props.action
       .getAllComplaints()
       .then(res => {
         if (res.success) {
-          setComplaintsData(res.complaints);
-          generateComplaintsStats(res.complaints);
+          setComplaintsData(
+            res.complaints.filter(
+              complaint => complaint.useremail === userData.email,
+            ),
+          );
+          generateComplaintsStats(
+            res.complaints.filter(
+              complaint => complaint.useremail === userData.email,
+            ),
+          );
         }
       })
       .catch(err => {

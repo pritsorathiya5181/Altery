@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -22,11 +22,22 @@ const EditProfileScreen = props => {
     firstName: 'Mike',
     lastName: 'Smith',
     email: 'mikesmith@gmail.com',
-    mobileNo: '1234567890',
+    phone: '1234567890',
     citizen: 'inland citizen',
     gender: 'male',
     check_textInputChange: false,
   });
+
+  useEffect(() => {
+    const routeUserInfo = props.route?.params?.userInfo;
+    console.log(routeUserInfo);
+    setUserInfo({
+      ...userInfo,
+      ...routeUserInfo,
+    });
+  }, []);
+
+  console.log(userInfo);
 
   const textInputChange = val => {
     if (Validators.isEmailValid(val.trim())) {
@@ -143,12 +154,12 @@ const EditProfileScreen = props => {
             autoCapitalize="none"
             underlineColorAndroid="transparent"
             keyboardType="numeric"
-            value={userInfo?.mobileNo}
+            value={userInfo?.phone}
             maxLength={10}
             onChangeText={val =>
               setUserInfo({
                 ...userInfo,
-                mobileNo: val,
+                phone: val,
               })
             }
           />

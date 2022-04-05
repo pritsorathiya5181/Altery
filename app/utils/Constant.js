@@ -1,7 +1,9 @@
 // export const BASE_URL = 'http://192.168.2.19:5000/api/';
 export const BASE_URL =
   'https://63gawwalt7.execute-api.us-east-1.amazonaws.com/prod/';
-export const LOGIN_BASE_URL = 'http://192.168.2.19:5055/';
+// export const LOGIN_BASE_URL = 'http://192.168.2.19:5055/';
+export const LOGIN_BASE_URL =
+  'http://testingbackend-env.eba-azurpuhm.us-east-1.elasticbeanstalk.com/';
 
 export const Citizen = [
   {
@@ -20,15 +22,15 @@ export const Citizen = [
 
 export const Gender = [
   {
-    key: 'male',
+    key: 'Male',
     text: 'Male',
   },
   {
-    key: 'female',
+    key: 'Female',
     text: 'Female',
   },
   {
-    key: 'other',
+    key: 'Other',
     text: 'Other',
   },
 ];

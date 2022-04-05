@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Image, ScrollView, TouchableOpacity} from 'react-native';
 import styles from './ProfileScreenStyle';
 import * as IMAGES from '../../../utils/Images';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useFocusEffect} from '@react-navigation/native';
 
 const ProfileScreen = props => {
   const [userInfo, setUserInfo] = useState({
@@ -13,12 +15,37 @@ const ProfileScreen = props => {
     gender: 'male',
   });
 
+  useFocusEffect(
+    React.useCallback(async () => {
+      let userData = await AsyncStorage.getItem('userInfo');
+      if (userData) {
+        userData = JSON.parse(userData);
+        console.log(userData['custom:citizen']);
+        setUserInfo({
+          firstName: userData.name,
+          lastName: userData.family_name,
+          email: userData.email,
+          phone: userData.phone_number,
+          citizen: userData['custom:citizen'],
+          gender: userData.gender,
+        });
+      }
+    }, []),
+  );
+
   const naviagetToChangePass = () => {
     props.navigation.navigate('ChnagePass');
   };
 
   const naviagetToEditProfile = () => {
-    props.navigation.navigate('EditProfile');
+    props.navigation.navigate('EditProfile', {
+      userInfo: userInfo,
+    });
+  };
+
+  const logoutHandle = () => {
+    AsyncStorage.removeItem('accessToken');
+    props.navigation.navigate('Login');
   };
 
   return (
@@ -27,7 +54,7 @@ const ProfileScreen = props => {
         <Text style={styles.headerTitle}>My Profile</Text>
         <Image
           source={
-            userInfo?.gender === 'male'
+            userInfo?.gender === 'Male'
               ? IMAGES.PROFILE_MAN
               : IMAGES.PROFILE_WOMAN
           }
@@ -39,7 +66,11 @@ const ProfileScreen = props => {
         </View>
       </View>
       <View style={styles.footer}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: 20,
+          }}>
           <Text style={styles.titleText}>Personal Information</Text>
 
           <View style={styles.contentView}>
@@ -70,10 +101,15 @@ const ProfileScreen = props => {
             onPress={() => naviagetToChangePass()}>
             <Text style={styles.btnText}>Change Password</Text>
           </TouchableOpacity> */}
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.profileBtn}
             onPress={() => naviagetToEditProfile()}>
             <Text style={styles.btnText}>Edit Profile</Text>
+          </TouchableOpacity> */}
+          <TouchableOpacity
+            style={styles.profileBtn}
+            onPress={() => logoutHandle()}>
+            <Text style={styles.btnText}>Logout</Text>
           </TouchableOpacity>
         </ScrollView>
       </View>
