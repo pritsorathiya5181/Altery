@@ -1,9 +1,12 @@
 // export const BASE_URL = 'http://192.168.2.19:5000/api/';
+// export const BASE_URL =
+//   'https://63gawwalt7.execute-api.us-east-1.amazonaws.com/prod/';
 export const BASE_URL =
-  'https://63gawwalt7.execute-api.us-east-1.amazonaws.com/prod/';
+  'https://7fblhqlwkb.execute-api.us-east-1.amazonaws.com/production/';
+
 // export const LOGIN_BASE_URL = 'http://192.168.2.19:5055/';
 export const LOGIN_BASE_URL =
-  'http://testingbackend-env.eba-azurpuhm.us-east-1.elasticbeanstalk.com/';
+  'http://awseb-awseb-13pci1zx5dltc-948238089.us-east-1.elb.amazonaws.com/';
 
 export const Citizen = [
   {
